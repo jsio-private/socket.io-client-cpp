@@ -1,2 +1,12 @@
 build/
 **/*.user
+
+CMakeFiles/
+CMakeScripts/
+CMakeCache.txt
+
+Makefile
+cmake_install.cmake
+install_manifest.txt
+libsioclient.a
+libsioclient_tls.a
