@@ -9,8 +9,16 @@
 #include <rapidjson/encodedstream.h>
 #include <rapidjson/writer.h>
 #include <cassert>
+#include <sstream>
 
 #define kBIN_PLACE_HOLDER "_placeholder"
+
+int stoi(const std::string& s) {
+    std::istringstream str(s);
+    int i;
+    str >> i;
+    return i;
+}
 
 namespace sio
 {
@@ -288,7 +296,7 @@ namespace sio
             if (_type == type_binary_event || _type == type_binary_ack) {
                 size_t score_pos = payload_ptr.find('-');
                 // FIXME: should be unsigned
-                _pending_buffers = std::stoi(payload_ptr.substr(pos,score_pos - pos));
+                _pending_buffers = stoi(payload_ptr.substr(pos,score_pos - pos));
                 pos = score_pos+1;
             }
         }
@@ -328,7 +336,7 @@ namespace sio
 
         if(pos<json_pos)//we've got pack id.
         {
-            _pack_id = std::stoi(payload_ptr.substr(pos,json_pos - pos));
+            _pack_id = stoi(payload_ptr.substr(pos,json_pos - pos));
         }
         if (_frame == frame_message && (_type == type_binary_event || _type == type_binary_ack)) {
             //parse later when all buffers are arrived.
