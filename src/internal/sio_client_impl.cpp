@@ -56,13 +56,13 @@ namespace sio
 
         m_packet_mgr.set_encode_callback(lib::bind(&client_impl::on_encode,this,_1,_2));
     }
-    
+
     client_impl::~client_impl()
     {
         this->sockets_invoke_void(&sio::socket::on_close);
         sync_close();
     }
-    
+
     void client_impl::connect(const string& uri, const map<string,string>& query)
     {
         if(m_reconn_timer)
@@ -380,7 +380,7 @@ namespace sio
             if(m_fail_listener)m_fail_listener();
         }
     }
-    
+
     void client_impl::on_open(connection_hdl con)
     {
         LOG("Connected." << endl);
@@ -391,7 +391,7 @@ namespace sio
         this->socket("");
         if(m_open_listener)m_open_listener();
     }
-    
+
     void client_impl::on_close(connection_hdl con)
     {
         LOG("Client Disconnected." << endl);
@@ -406,7 +406,7 @@ namespace sio
         {
             code = conn_ptr->get_local_close_code();
         }
-        
+
         m_con.reset();
         this->clear_timers();
         client::close_reason reason;
@@ -431,13 +431,13 @@ namespace sio
             }
             reason = client::close_reason_drop;
         }
-        
+
         if(m_close_listener)
         {
             m_close_listener(reason);
         }
     }
-    
+
     void client_impl::on_message(connection_hdl con, client_type::message_ptr msg)
     {
         if (m_ping_timeout_timer) {
@@ -448,7 +448,7 @@ namespace sio
         // Parse the incoming message according to socket.IO rules
         m_packet_mgr.put_payload(msg->get_payload());
     }
-    
+
     void client_impl::on_handshake(message::ptr const& message)
     {
         if(message && message->get_flag() == message::flag_object)
@@ -528,13 +528,13 @@ failed:
             break;
         }
     }
-    
+
     void client_impl::on_encode(bool isBinary,shared_ptr<const string> const& payload)
     {
         LOG("encoded payload length:"<<payload->length()<<endl);
         m_client.get_io_service().dispatch(lib::bind(&client_impl::send_impl,this,payload,isBinary?frame::opcode::binary:frame::opcode::text));
     }
-    
+
     void client_impl::clear_timers()
     {
         LOG("clear timers"<<endl);
@@ -550,14 +550,14 @@ failed:
             m_ping_timer.reset();
         }
     }
-    
+
     void client_impl::reset_states()
     {
         m_client.reset();
         m_sid.clear();
         m_packet_mgr.reset();
     }
-    
+
 #if SIO_TLS
     client_impl::context_ptr client_impl::on_tls_init(connection_hdl conn)
     {
@@ -570,7 +570,7 @@ failed:
         {
             cerr<<"Init tls failed,reason:"<< ec.message()<<endl;
         }
-        
+
         return ctx;
     }
 #endif

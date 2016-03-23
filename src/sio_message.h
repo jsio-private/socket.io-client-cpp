@@ -15,7 +15,7 @@
 namespace sio
 {
     using namespace std;
-    
+
     class message
     {
     public:
@@ -32,14 +32,14 @@ namespace sio
         };
 
         virtual ~message(){};
-        
+
         class list;
 
         flag get_flag() const
         {
             return _flag;
         }
-        
+
         typedef shared_ptr<message> ptr;
 
         virtual bool get_bool() const
@@ -47,19 +47,19 @@ namespace sio
             assert(false);
             return false;
         }
-        
+
         virtual int64_t get_int() const
         {
             assert(false);
             return 0;
         }
-        
+
         virtual double get_double() const
         {
             assert(false);
             return 0;
         }
-        
+
         virtual string const& get_string() const
         {
             assert(false);
@@ -67,7 +67,7 @@ namespace sio
             s_empty_string.clear();
             return s_empty_string;
         }
-        
+
         virtual shared_ptr<const string> const& get_binary() const
         {
             assert(false);
@@ -75,7 +75,7 @@ namespace sio
             s_empty_binary = nullptr;
             return s_empty_binary;
         }
-        
+
         virtual const vector<ptr>& get_vector() const
         {
             assert(false);
@@ -91,7 +91,7 @@ namespace sio
             s_empty_vector.clear();
             return s_empty_vector;
         }
-        
+
         virtual const map<string,message::ptr>& get_map() const
         {
             assert(false);
@@ -99,7 +99,7 @@ namespace sio
             s_empty_map.clear();
             return s_empty_map;
         }
-        
+
         virtual map<string,message::ptr>& get_map()
         {
             assert(false);
@@ -109,7 +109,7 @@ namespace sio
         }
     private:
         flag _flag;
-        
+
     protected:
         message(flag f):_flag(f){}
     };
@@ -138,19 +138,19 @@ namespace sio
             :message(flag_boolean),_v(v)
         {
         }
-        
+
     public:
         static message::ptr create(bool v)
         {
             return ptr(new bool_message(v));
         }
-        
+
         bool get_bool() const
         {
             return _v;
         }
     };
-    
+
     class int_message : public message
     {
         int64_t _v;
@@ -159,24 +159,24 @@ namespace sio
             :message(flag_integer),_v(v)
         {
         }
-        
+
     public:
         static message::ptr create(int64_t v)
         {
             return ptr(new int_message(v));
         }
-        
+
         int64_t get_int() const
         {
             return _v;
         }
-        
+
         double get_double() const//add double accessor for integer.
         {
             return static_cast<double>(_v);
         }
     };
-    
+
     class double_message : public message
     {
         double _v;
@@ -184,19 +184,19 @@ namespace sio
             :message(flag_double),_v(v)
         {
         }
-        
+
     public:
         static message::ptr create(double v)
         {
             return ptr(new double_message(v));
         }
-        
+
         double get_double() const
         {
             return _v;
         }
     };
-    
+
     class string_message : public message
     {
         string _v;
@@ -219,13 +219,13 @@ namespace sio
         {
             return ptr(new string_message(move(v)));
         }
-        
+
         string const& get_string() const
         {
             return _v;
         }
     };
-    
+
     class binary_message : public message
     {
         shared_ptr<const string> _v;
@@ -238,20 +238,20 @@ namespace sio
         {
             return ptr(new binary_message(v));
         }
-        
+
         shared_ptr<const string> const& get_binary() const
         {
             return _v;
         }
     };
-    
+
     class array_message : public message
     {
         vector<message::ptr> _v;
         array_message():message(flag_array)
         {
         }
-        
+
     public:
         static message::ptr create()
         {
@@ -332,13 +332,13 @@ namespace sio
         {
             return _v;
         }
-        
+
         const vector<ptr>& get_vector() const
         {
             return _v;
         }
     };
-    
+
     class object_message : public message
     {
         map<string,message::ptr> _v;
@@ -406,7 +406,7 @@ namespace sio
         {
             return _v;
         }
-        
+
         const map<string,message::ptr>& get_map() const
         {
             return _v;
